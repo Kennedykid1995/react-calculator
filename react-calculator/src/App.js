@@ -67,7 +67,7 @@ const Button = styled.div`
   }
 `
 const ZeroBtn = styled.div`
-  width: 151.5px; 
+  width: 231px; 
   height: 70px;
   border: 1px solid white;
   border-radius: 20px;
@@ -95,6 +95,7 @@ const ZeroBtn = styled.div`
   }
 `
 
+
 class App extends Component {
   constructor(){
     super();
@@ -112,32 +113,33 @@ class App extends Component {
   handleType (e) {
     const value = e.target.attributes.getNamedItem('data-filter').value;
 
-    this.setState((prevState) => {
-      const current = (this.state.current == 0 || this.state.current == this.state.total) ? '' : this.state.current;
+    this.setState(() => {
+      const current = (this.state.current == 0 || this.state.current == this.state.total ) ? '' : this.state.current;
       return {current: parseInt(current + value)};
-    })
+    });
+      
   }
-  calculate (sign, number){
-    const total = this.state.total;
-    console.log(total);
+ calculate() {
+    const total = parseInt(this.state.total);
+    const current = parseInt(this.state.current);
+    const sign = this.state.operator;
     switch(sign){
-      case "-":
-        return total - number;
+       case "-":
+        return total - current;
           break;
-      case "+":
-        return total + number;
+       case "+":
+          return  total + current;
           break;
-      case "*":
-        return total * number;
+       case "*":
+          return  total * current;
           break;
-      case "/":
-        return total / number;
-         break;
-      default:
-        return 0;
-    }
+       case "/":
+          return  total / current;
+          break;
+       default:
+          return 0;
+     }
   };
-
   handleAction (e) {
     const operator = e.target.attributes.getNamedItem('data-filter').value;
 
@@ -152,7 +154,7 @@ class App extends Component {
   }
   getResult () {
     this.setState({
-      current: parseFloat(this.calculate(this.state.operator, this.state.current))
+      current: this.calculate(this.state.operator, this.state.current)
     });
   }
 
@@ -176,15 +178,9 @@ class App extends Component {
           </OutputBox>
           </NumBtnContainer>
           <NumBtnContainer>
-            <Button onClick={this.cancel}>
+            <ZeroBtn onClick={this.cancel}>
               C
-            </Button>
-            <Button>
-              +/-
-            </Button>
-            <Button>
-              %
-            </Button>
+            </ZeroBtn>
             <Button data-filter="/" onClick={this.handleAction}>
               /
             </Button>
@@ -227,7 +223,7 @@ class App extends Component {
             <Button data-filter="3" onClick={this.handleType}>
               3
             </Button>
-            <Button data-filter="-" onClick={this.handleAction}>
+            <Button data-filter="+" onClick={this.handleAction}>
               +
             </Button>
           </NumBtnContainer>
@@ -235,9 +231,6 @@ class App extends Component {
             <ZeroBtn data-filter="0" onClick={this.handleType}>
               0
             </ZeroBtn>
-            <Button>
-              .
-            </Button>
             <Button onClick={this.getResult}>
               =
             </Button>
